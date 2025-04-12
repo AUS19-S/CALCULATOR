@@ -1,43 +1,48 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const display = document.querySelector('.display p');
-    const buttons = document.querySelectorAll('.numbers');
-    let operator = '';
-    let currentValue = '';
-    let previousValue = '';
+document.addEventListener("DOMContentLoaded", ()=>{
+    let display = document.querySelector(".display p");
+    let buttons = document.querySelectorAll(".numbers");
+    let operator = "";
+    let previousValue = "";
+    let currentValue = "";
 
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            const value = this.textContent;
+    buttons.forEach(button=>{
+        button.addEventListener("click", ()=>{
+            const value = button.textContent;
 
-            if (value === 'C') {
-                // Limpa o display
-                display.textContent = '0';
-                currentValue = '';
-                previousValue = '';
-                operator = '';
-            } else if (value === '<') {
-                // Apaga o último dígito
-                currentValue = currentValue.slice(0, -1);
-                display.textContent = currentValue || '0';
-            } else if (['+', '-', '*', '/'].includes(value)) {
-                // Define o operador e armazena o valor anterior
-                operator = value;
-                previousValue = currentValue;
-                currentValue = '';
-            } else if (value === '=') {
-                // Realiza o cálculo
-                if (previousValue && currentValue && operator) {
-                    const result = eval(`${previousValue} ${operator} ${currentValue}`);
-                    display.textContent = result;
-                    currentValue = result.toString();
-                    previousValue = '';
-                    operator = '';
-                }
-            } else {
-                // Adiciona o número ao display
-                currentValue += value;
-                display.textContent = currentValue;
+            switch(true){
+                case value ==="C":
+                    operator = "";
+                    previousValue = "";
+                    currentValue = "";
+                    display.textContent = "0";
+                    break;
+
+                case value === "<":
+                    currentValue = currentValue.slice(0, -1);
+                    display.textContent = currentValue || "0";
+                    break;
+
+                case ["+","-","*","/"].includes(value):
+                    operator = value;
+                    previousValue = currentValue;
+                    currentValue = "";
+                    break;
+
+                case value === "=":
+                    if(previousValue && operator && currentValue){
+                        const result = eval(`${previousValue} ${operator} ${currentValue}`)
+                        display.textContent =  result;
+                        currentValue = result.toString();
+                        previousValue = "";
+                        operator = "";
+                        break;
+                    }
+
+                default:
+                    currentValue += value;
+                    display.textContent = currentValue;
+                    break;
             }
-        });
-    });
+        })
+    })
 });
